@@ -1,6 +1,6 @@
 const express = require('express');
 const parser = require('body-parser').urlencoded({ extended: false });
-const { insertUser } = require('./db');
+const { insertUser, checkSignIn } = require('./db');
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -22,3 +22,10 @@ app.post('/signup', parser, (req, res) => {
     });
 });
 
+app.post('/signin', parser, (req, res) => {
+    const { username, password } = req.body;
+    checkSignIn(username, password, err => {
+        if (err) return res.send('LOI');
+        res.send('DANG NHAP THANH CONG');
+    });
+});
