@@ -33,8 +33,13 @@ const insertUser = (username, password, email, name, cb) => {
 };
 
 //fucntion check login
+const checkSignIn = (username, password, cb) => {
+    const sql = `SELECT id FROM public."User" WHERE username = '${username}' AND password = '${password}'`;// eslint-disable-line
+    query(sql, (err, result) => {
+        if (err) return cb(err);
+        if (result.rowCount !== 1) return cb('SAI_THONG_TIN_DANG_NHAP');
+        cb(undefined);
+    });
+};
 
-insertUser('vanpho1', '123', 'vanpho02@gmail.com', 'Pho Nguyen', err => {
-    if (err) return console.log(err);
-    console.log('Dang ky thanh cong');
-});
+module.exports = { insertUser, checkSignIn };
