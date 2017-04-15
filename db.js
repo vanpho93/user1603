@@ -24,8 +24,17 @@ function query(sql, cb) {
 //function insert new user
 
 const insertUser = (username, password, email, name, cb) => {
-    const sql = '';
-    
+    const sql = `INSERT INTO public."User"(username, password, email, name)
+	VALUES ('${username}','${password}','${email}','${name}');`;
+    query(sql, err => {
+        if (err) return cb(err);
+        cb(undefined);
+    });
 };
 
 //fucntion check login
+
+insertUser('vanpho1', '123', 'vanpho02@gmail.com', 'Pho Nguyen', err => {
+    if (err) return console.log(err);
+    console.log('Dang ky thanh cong');
+});
