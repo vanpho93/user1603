@@ -1,4 +1,5 @@
 const pg = require('pg');
+const bcrypt = require('bcrypt');
 
 const config = {
     host: 'localhost',
@@ -34,11 +35,14 @@ const insertUser = (username, password, email, name, cb) => {
 
 //fucntion check login
 const checkSignIn = (username, password, cb) => {
-    const sql = `SELECT id FROM public."User" WHERE username = '${username}' AND password = '${password}'`;// eslint-disable-line
+    const sql = `SELECT password FROM public."User" WHERE username = '${username}'`;// eslint-disable-line
     query(sql, (err, result) => {
         if (err) return cb(err);
-        if (result.rowCount !== 1) return cb('SAI_THONG_TIN_DANG_NHAP');
-        cb(undefined);
+        const hashPassword = result.rows[0].password;
+        bcrypt.compare(password, hashPassword, (errHash, same) => {
+            if (!same) return cb('DANG_NHAP_KHONG_THANH_CONG');
+            cb(undefined);
+        });
     });
 };
 
