@@ -11,3 +11,4 @@ bcrypt.compare('vanpho93', 'MSqUxT2wwBY7pq11abbgp3rEodZDD6NxezFQiIDThNyhi4X4RRYi
     if (same) return console.log('DUNG');
     console.log('SAI');
 });
+//m25-898-722
