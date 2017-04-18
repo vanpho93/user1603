@@ -1,6 +1,7 @@
 const express = require('express');
 const parser = require('body-parser').urlencoded({ extended: false });
-const { hash, compare } = require('bcrypt');
+const { hash } = require('bcrypt');
+const User = require('./User');
 const { insertUser, checkSignIn } = require('./db');
 
 
@@ -28,8 +29,9 @@ app.post('/signup', parser, (req, res) => {
 
 app.post('/signin', parser, (req, res) => {
     const { username, password } = req.body;
-    checkSignIn(username, password, err => {
-        if (err) return res.send('LOI');
-        res.send('DANG NHAP THANH CONG');
+    const user = new User(username, password);
+    user.checkSignIn(err => {
+        if (err) res.send(err);
+        res.send('DANG_NHAP_THANH_CONG');
     });
 });

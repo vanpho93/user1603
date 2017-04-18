@@ -46,4 +46,4 @@ const checkSignIn = (username, password, cb) => {
     });
 };
 
-module.exports = { insertUser, checkSignIn };
+module.exports = { insertUser, checkSignIn, query };
