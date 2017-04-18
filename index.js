@@ -29,7 +29,7 @@ app.post('/signup', parser, (req, res) => {
 app.post('/signin', parser, (req, res) => {
     const { username, password } = req.body;
     checkSignIn(username, password, err => {
-        if (err) return res.send('LOI: ' + err);
+        if (err) return res.send('LOI');
         res.send('DANG NHAP THANH CONG');
     });
 });

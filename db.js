@@ -11,10 +11,10 @@ const config = {
 
 const pool = new pg.Pool(config);
 
-function query(sql, cb) {
+function query(sql, arrayData, cb) {
     pool.connect((err, client, done) => {
         if (err) return cb(err);
-        client.query(sql, (errQuery, result) => {
+        client.query(sql, arrayData, (errQuery, result) => {
             done(errQuery);
             if (errQuery) return cb(errQuery);
             cb(undefined, result);
@@ -26,8 +26,8 @@ function query(sql, cb) {
 
 const insertUser = (username, password, email, name, cb) => {
     const sql = `INSERT INTO public."User"(username, password, email, name)
-	VALUES ('${username}','${password}','${email}','${name}');`;
-    query(sql, err => {
+	VALUES ($1, $2, $3, $4);`;
+    query(sql, [username, password, email, name], err => {
         if (err) return cb(err);
         cb(undefined);
     });
@@ -35,8 +35,8 @@ const insertUser = (username, password, email, name, cb) => {
 
 //fucntion check login
 const checkSignIn = (username, password, cb) => {
-    const sql = `SELECT password FROM public."User" WHERE username = '${username}'`;// eslint-disable-line
-    query(sql, (err, result) => {
+    const sql = `SELECT password FROM public."User" WHERE username = $1`;// eslint-disable-line
+    query(sql, [username], (err, result) => {
         if (err) return cb(err);
         const hashPassword = result.rows[0].password;
         bcrypt.compare(password, hashPassword, (errHash, same) => {
