@@ -19,11 +19,10 @@ app.get('/signin', (req, res) => res.render('signin'));
 
 app.post('/signup', parser, (req, res) => {
     const { name, username, password, email } = req.body;
-    hash(password, 10, (err, encypted) => {
-        insertUser(username, encypted, email, name, errQuery => {
-            if (errQuery) return res.send('LOI DANG KY!!!');
-            res.send('DANG KY THANH CONG');
-        });
+    const user = new User(username, password, email, name);
+    user.insertUser(err => {
+        if (err) return res.send(err);
+        res.send('DANG_KY_THANH_CONG');
     });
 });
 

@@ -12,12 +12,15 @@ class User {
     }
 
     insertUser(cb) {
-        const sql = `INSERT INTO public."User"(username, password, email, name)
-	    VALUES ($1, $2, $3, $4);`;
-        const { username, password, email, name } = this;
-        query(sql, [username, password, email, name], err => {
+        bcrypt.hash(this.password, 10, (err, encypted) => {
             if (err) return cb(err);
-            cb(undefined);
+            const sql = `INSERT INTO public."User"(username, password, email, name)
+	            VALUES ($1, $2, $3, $4);`;
+            const { username, email, name } = this;
+            query(sql, [username, encypted, email, name], errInsert => {
+                if (errInsert) return cb(errInsert);
+                cb(undefined);
+            });
         });
     }
 
